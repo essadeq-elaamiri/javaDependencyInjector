@@ -29,9 +29,10 @@ public class EmployeeServiceImpl implements EmployeeService{
                 Salary: ${INMDH} MDH
                 Department: ${DEP}
                 """;
-        return base.replace("${NAME}", employee.getName())
+        String empStr = base.replace("${NAME}", employee.getName())
                 .replace("${EMAIL}", employee.getEmail())
                 .replace("${INMDH}", String.valueOf(employee.getSalary()))
-                .replace("${DEP}", employee.getDepartment());
+                .replace("${DEP}", employee.getDepartment()==null? "Undefined" : employee.getDepartment());
+        return empStr;
     }
 }

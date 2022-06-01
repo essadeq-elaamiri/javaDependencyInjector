@@ -45,7 +45,7 @@ public class Application {
         //A. // Here is the solution with the bad way (Strong dependency).
         EmployeeService employeeService = new EmployeeServiceImpl();
         // show the first
-        System.out.println(employeeService.showEmployee(employees.get(0)));
+        //System.out.println(employeeService.showEmployee(employees.get(0)));
 
 
         // using our framework.

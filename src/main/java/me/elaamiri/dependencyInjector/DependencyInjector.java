@@ -20,6 +20,12 @@ import java.util.Optional;
 
 public class DependencyInjector {
 
+    /***
+     *
+     * @param configFilePath
+     * @return
+     * @throws BeansCouldNotBeLoadedException
+     */
     public static Context runInjector(String configFilePath) throws BeansCouldNotBeLoadedException {
 
         /**
@@ -44,14 +50,12 @@ public class DependencyInjector {
                 // check if bean has properties to
                 if (!bean.getBeanFields().isEmpty()){
                     bean.getBeanFields().forEach(beanField -> {
-                        // get the setter
+
                         try {
-                            //Method beanFieldSetter = beanClass.getMethod(beanField.getDefaultSetterName(), contextBeans.get(beanField.getValue()).getClass());
-                            //Method beanFieldSetter = beanClass.getDeclaredMethod(beanField.getDefaultSetterName(), contextBeans.get(beanField.getValue()).getClass());
-                            Method beanFieldSetter = beanClass.getDeclaredMethod("setEmployeeDao", EmployeeDao.class);
+                            // get the setter
+                            Method beanFieldSetter = beanClass.getDeclaredMethod(beanField.getDefaultSetterName(), contextBeans.get(beanField.getValue()).getClass().getInterfaces());
                             // pass the value (injection) (invoking setter)
                             beanFieldSetter.invoke(beanInstance, contextBeans.get(beanField.getValue()));
-
 
                         } catch (NoSuchMethodException e) {
                             throw new RuntimeException(e);

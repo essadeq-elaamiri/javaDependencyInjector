@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans>
+    <bean name="instanceName" className="package.name.ClassName">
+        <bean-field name="propertyName" value="instanceName"/>
+    </bean>
+    <bean name="instanceName" className="package.name.ClassName">
+        <bean-field name="propertyName" value="instanceName"/>
+    </bean>
+</beans>
+
+<!--
+<beans>
+<bean name="instanceName" className="package.name.ClassName">
+    <property name="propertyName" value="instanceName"/>
+    <setter name="setterName" value="instanceName"/>
+    <constructor name="attributeName" value="instanceName"/>
+</bean>
+<bean name="instanceName" className="package.name.ClassName">
+    <property name="propertyName" value="instanceName"/>
+    <setter name="setterName" value="instanceName"/>
+    <constructor name="attributeName" value="instanceName"/>
+</bean>
+</beans>
+-->

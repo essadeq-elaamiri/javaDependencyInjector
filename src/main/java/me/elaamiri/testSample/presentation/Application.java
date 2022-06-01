@@ -1,6 +1,7 @@
 package me.elaamiri.testSample.presentation;
 
 
+import me.elaamiri.dependencyInjector.DependencyInjector;
 import me.elaamiri.testSample.entities.Employee;
 import me.elaamiri.testSample.service.EmployeeService;
 import me.elaamiri.testSample.service.EmployeeServiceImpl;
@@ -47,6 +48,9 @@ public class Application {
         In the other application
         2. By Annotations (in Field, contractor, and via setter) (@InjectTo) (@Injectable)
          */
+
+        // lets test marshamming
+        DependencyInjector.fun();
 
     }
 

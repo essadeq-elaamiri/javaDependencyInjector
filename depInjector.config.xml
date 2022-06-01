@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<beans>
+    <Bean name="name" className="className">
+        <bean-field name="k" value="fhfh"/>
+    </Bean>
+    <Bean name="name" className="className">
+        <bean-field name="k" value="fhfh"/>
+    </Bean>
+    <Bean name="name" className="className">
+        <bean-field name="k" value="fhfh"/>
+    </Bean>
+    <Bean name="name" className="className">
+        <bean-field name="k" value="fhfh"/>
+    </Bean>
+</beans>

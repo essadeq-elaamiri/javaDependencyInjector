@@ -3,6 +3,6 @@
     <Bean name="employeeDaoImpl1" className="me.elaamiri.testSample.dao.EmployeeDaoImpl1">
     </Bean>
     <Bean name="employeeServiceImpl" className="me.elaamiri.testSample.service.EmployeeServiceImpl">
-        <bean-field name="employeeDao" value="employeeServiceImpl"/>
+        <bean-field name="employeeDao" value="employeeDaoImpl1"/>
     </Bean>
 </beans>

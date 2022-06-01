@@ -18,8 +18,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     public String getServiceMessage(){
-        //return employeeDao.getDAOAction();
-        return "Done";
+        return employeeDao.getDAOAction();
+        //return "Done";
     }
     @Override
     public List<Employee> getEmployeesByName(List<Employee> employees,String keyword) {

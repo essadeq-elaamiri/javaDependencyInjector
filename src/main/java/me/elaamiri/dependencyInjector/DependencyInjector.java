@@ -7,6 +7,7 @@ import me.elaamiri.dependencyInjector.entities.Beans;
 import me.elaamiri.dependencyInjector.entities.Context;
 import me.elaamiri.dependencyInjector.exceptions.BeanExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeansCouldNotBeLoadedException;
+import me.elaamiri.testSample.dao.EmployeeDao;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -45,9 +46,12 @@ public class DependencyInjector {
                     bean.getBeanFields().forEach(beanField -> {
                         // get the setter
                         try {
-                            Method beanFieldSetter = beanClass.getMethod(beanField.getDefaultSetterName(), beanClass);
+                            //Method beanFieldSetter = beanClass.getMethod(beanField.getDefaultSetterName(), contextBeans.get(beanField.getValue()).getClass());
+                            //Method beanFieldSetter = beanClass.getDeclaredMethod(beanField.getDefaultSetterName(), contextBeans.get(beanField.getValue()).getClass());
+                            Method beanFieldSetter = beanClass.getDeclaredMethod("setEmployeeDao", EmployeeDao.class);
+                            // pass the value (injection) (invoking setter)
                             beanFieldSetter.invoke(beanInstance, contextBeans.get(beanField.getValue()));
-                            // pass the value (injection)
+
 
                         } catch (NoSuchMethodException e) {
                             throw new RuntimeException(e);

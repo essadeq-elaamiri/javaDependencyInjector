@@ -8,15 +8,20 @@ import me.elaamiri.testSample.enumerations.CurrencyType;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
+
 public class EmployeeServiceImpl implements EmployeeService{
 
     private EmployeeDao employeeDao; // to be injected
 
-    public void setEmployeeDao(EmployeeDao employeeDao) {
-        this.employeeDao = employeeDao;
+    public EmployeeDao getEmployeeDao() {
+        return employeeDao;
     }
 
+    /*
+        public void setEmployeeDao(EmployeeDao employeeDao) {
+            this.employeeDao = employeeDao;
+        }
+        */
     public String getServiceMessage(){
         return employeeDao.getDAOAction();
         //return "Done";

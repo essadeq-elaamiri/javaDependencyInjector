@@ -1,6 +1,7 @@
 package me.elaamiri.dependencyInjector.entities;
 
 import lombok.Data;
+import me.elaamiri.dependencyInjector.enums.FieldInjectionType;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -15,6 +16,10 @@ public class BeanField implements Serializable {
     private String name;
     @XmlAttribute
     private String value;
+
+    @XmlAttribute
+    private FieldInjectionType injectInto;
+
 
     public String getDefaultSetterName(){
         String setterName = "set".concat(String.valueOf(name.charAt(0)).toUpperCase().concat(name.substring(1)));

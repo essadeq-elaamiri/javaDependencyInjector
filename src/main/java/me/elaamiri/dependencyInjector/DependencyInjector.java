@@ -5,7 +5,9 @@ import me.elaamiri.dependencyInjector.entities.Bean;
 import me.elaamiri.dependencyInjector.entities.BeanField;
 import me.elaamiri.dependencyInjector.entities.Beans;
 import me.elaamiri.dependencyInjector.entities.Context;
+import me.elaamiri.dependencyInjector.enums.FieldInjectionType;
 import me.elaamiri.dependencyInjector.exceptions.BeanExistsException;
+import me.elaamiri.dependencyInjector.exceptions.BeanFieldExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeansCouldNotBeLoadedException;
 import me.elaamiri.testSample.dao.EmployeeDao;
 
@@ -13,6 +15,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -48,24 +51,41 @@ public class DependencyInjector {
                 Object beanInstance = beanClass.getDeclaredConstructor().newInstance();
                 contextBeans.put(bean.getName(), beanInstance);
                 // check if bean has properties to
-                if (!bean.getBeanFields().isEmpty()){
+                if (!bean.getBeanFields().isEmpty()) {
                     bean.getBeanFields().forEach(beanField -> {
+                                Method beanFieldSetter = null;
+                                if (beanField.getInjectInto().equals(FieldInjectionType.SETTER)) {
+                                    try {
+                                        // get the setter
+                                        beanFieldSetter = beanClass.getDeclaredMethod(beanField.getDefaultSetterName(), contextBeans.get(beanField.getValue()).getClass().getInterfaces());
+                                        // pass the value (injection) (invoking setter)
+                                        beanFieldSetter.invoke(beanInstance, contextBeans.get(beanField.getValue()));
 
-                        try {
-                            // get the setter
-                            Method beanFieldSetter = beanClass.getDeclaredMethod(beanField.getDefaultSetterName(), contextBeans.get(beanField.getValue()).getClass().getInterfaces());
-                            // pass the value (injection) (invoking setter)
-                            beanFieldSetter.invoke(beanInstance, contextBeans.get(beanField.getValue()));
+                                    } catch (NoSuchMethodException e) {
+                                        throw new RuntimeException(e);
+                                    } catch (InvocationTargetException e) {
+                                        throw new RuntimeException(e);
+                                    } catch (IllegalAccessException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                } else if (beanField.getInjectInto().equals(FieldInjectionType.FIELD)) {
 
-                        } catch (NoSuchMethodException e) {
-                            throw new RuntimeException(e);
-                        } catch (InvocationTargetException e) {
-                            throw new RuntimeException(e);
-                        } catch (IllegalAccessException e) {
-                            throw new RuntimeException(e);
-                        }
+                                    try {
+                                        // if there is no setter methode use field based injection
+                                        Field field = beanClass.getDeclaredField(beanField.getName());
+                                        // Set the accessibility as true
+                                        field.setAccessible(true);
+                                        field.set(beanInstance, contextBeans.get(beanField.getValue()));
+                                    } catch (IllegalAccessException e) {
+                                        throw new RuntimeException(e);
+                                    } catch (NoSuchFieldException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
 
-                    });
+
+                            }
+                    );
                 }
 
                 context.addToInstancesMap(bean.getName(), beanInstance);
@@ -110,7 +130,7 @@ public class DependencyInjector {
         }
 
         return beansOptional.orElseThrow(() -> {
-           return new BeansCouldNotBeLoadedException();
+            return new BeansCouldNotBeLoadedException();
         });
     }
 
@@ -120,24 +140,25 @@ public class DependencyInjector {
      * @throws BeanExistsException
      */
 
-    /*
+
     // test write to the file
-    public static void fun() throws BeanExistsException {
+    public static void fun() throws BeanExistsException, BeanFieldExistsException {
         {
 
             Beans diBeans = new Beans();
             Bean diBean;
             for (int i = 1; i <= 4; i++) {
                 diBean = new Bean();
-                diBean.setName("name");
-                diBean.setClassName("className");
+                diBean.setName("namei" + i);
+                diBean.setClassName("className" + i);
                 diBeans.addBean(diBean);
 
                 BeanField beanField = new BeanField();
-                beanField.setName("k");
-                beanField.setValue("fhfh");
+                beanField.setName("k" + i);
+                beanField.setValue("fhfh" + i);
+                beanField.setInjectInto(FieldInjectionType.FIELD);
 
-                //diBean.addBeanField(beanField);
+                diBean.addBeanField(beanField);
             }
 
 
@@ -165,6 +186,6 @@ public class DependencyInjector {
             System.out.println("Hello World!");
         }
     }
-    */
+
 }
 

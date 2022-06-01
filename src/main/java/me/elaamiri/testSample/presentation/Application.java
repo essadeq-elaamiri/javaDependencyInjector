@@ -4,6 +4,8 @@ package me.elaamiri.testSample.presentation;
 import me.elaamiri.dependencyInjector.DependencyInjector;
 import me.elaamiri.dependencyInjector.entities.Beans;
 import me.elaamiri.dependencyInjector.entities.Context;
+import me.elaamiri.dependencyInjector.exceptions.BeanExistsException;
+import me.elaamiri.dependencyInjector.exceptions.BeanFieldExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeanNotFoundException;
 import me.elaamiri.dependencyInjector.exceptions.BeansCouldNotBeLoadedException;
 import me.elaamiri.testSample.dao.EmployeeDaoImpl1;
@@ -19,7 +21,7 @@ import java.util.stream.Stream;
 
 
 public class Application {
-    public static void main(String[] args) throws BeanNotFoundException, BeansCouldNotBeLoadedException {
+    public static void main(String[] args) throws BeanNotFoundException, BeansCouldNotBeLoadedException, BeanExistsException, BeanFieldExistsException {
         /**
          * TODO: show the  first Employee from the list, get his salary value in $, after that find the employee with name contains 'z' in the list
          * To that, This application needs an instance of EmployeeServiceImp, which present these functionalities
@@ -61,7 +63,9 @@ public class Application {
         Context context = DependencyInjector.runInjector(null);
         EmployeeServiceImpl service = (EmployeeServiceImpl) context.getBeanByName("employeeServiceImpl");
         System.out.println(service.getServiceMessage());
-        service.setEmployeeDao(new EmployeeDaoImpl1());
+        //service.setEmployeeDao(new EmployeeDaoImpl1());
+        System.out.println(service.getEmployeeDao());
+
     }
 
 }

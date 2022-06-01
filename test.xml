@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <beans>
-    <Bean name="name" className="className">
-        <bean-field name="k" value="fhfh"/>
+    <Bean name="namei1" className="className1">
+        <bean-field name="k1" value="fhfh1" injectInto="FIELD"/>
     </Bean>
-    <Bean name="name" className="className">
-        <bean-field name="k" value="fhfh"/>
+    <Bean name="namei2" className="className2">
+        <bean-field name="k2" value="fhfh2" injectInto="FIELD"/>
     </Bean>
-    <Bean name="name" className="className">
-        <bean-field name="k" value="fhfh"/>
+    <Bean name="namei3" className="className3">
+        <bean-field name="k3" value="fhfh3" injectInto="FIELD"/>
     </Bean>
-    <Bean name="name" className="className">
-        <bean-field name="k" value="fhfh"/>
+    <Bean name="namei4" className="className4">
+        <bean-field name="k4" value="fhfh4" injectInto="FIELD"/>
     </Bean>
 </beans>

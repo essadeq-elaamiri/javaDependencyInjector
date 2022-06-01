@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <beans>
-    <Bean name="name" className="className">
-        <bean-field name="k" value="fhfh"/>
+    <Bean name="employeeDaoImpl1" className="me.elaamiri.testSample.dao.EmployeeDaoImpl1">
     </Bean>
-    <Bean name="name" className="className">
-        <bean-field name="k" value="fhfh"/>
-    </Bean>
-    <Bean name="name" className="className">
-        <bean-field name="k" value="fhfh"/>
-    </Bean>
-    <Bean name="name" className="className">
-        <bean-field name="k" value="fhfh"/>
+    <Bean name="employeeServiceImpl" className="me.elaamiri.testSample.service.EmployeeServiceImpl">
+        <bean-field name="employeeDao" value="employeeServiceImpl"/>
     </Bean>
 </beans>

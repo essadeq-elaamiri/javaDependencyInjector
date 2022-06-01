@@ -1,6 +1,7 @@
 package me.elaamiri.dependencyInjector.entities;
 
 import lombok.Data;
+import me.elaamiri.dependencyInjector.exceptions.BeanExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeanNotFoundException;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -20,7 +21,8 @@ public class Beans implements Serializable {
     @XmlElement(name="Bean")
     private List<Bean> beans = new ArrayList<Bean>();
 
-    public Bean addBean(Bean bean){
+    public Bean addBean(Bean bean) throws BeanExistsException {
+        if(this.beans.contains(bean)) throw new BeanExistsException();
         this.beans.add(bean);
         return  bean;
     }
@@ -38,8 +40,8 @@ public class Beans implements Serializable {
         });
     }
 
-    public Bean getBeanByIndex(String name) throws BeanNotFoundException{
-        Optional<Bean> bean2 = Optional.of(this.beans.stream().filter(bean -> bean.getName().equals(name)).collect(Collectors.toList()).get(0));
+    public Bean getBeanByIndex(int index) throws BeanNotFoundException{
+        Optional<Bean> bean2 = Optional.of(this.beans.get(index));
         return bean2.orElseThrow(() -> {
             return new BeanNotFoundException();
         });

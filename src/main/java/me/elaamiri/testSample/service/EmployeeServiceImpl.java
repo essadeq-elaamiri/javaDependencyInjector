@@ -1,12 +1,26 @@
 package me.elaamiri.testSample.service;
 
+import lombok.Data;
+import me.elaamiri.testSample.dao.EmployeeDao;
 import me.elaamiri.testSample.entities.Employee;
 import me.elaamiri.testSample.enumerations.CurrencyType;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Data
 public class EmployeeServiceImpl implements EmployeeService{
+
+    private EmployeeDao employeeDao; // to be injected
+
+    public void setEmployeeDao(EmployeeDao employeeDao) {
+        this.employeeDao = employeeDao;
+    }
+
+    public String getServiceMessage(){
+        //return employeeDao.getDAOAction();
+        return "Done";
+    }
     @Override
     public List<Employee> getEmployeesByName(List<Employee> employees,String keyword) {
         return employees.stream().filter(employee -> {

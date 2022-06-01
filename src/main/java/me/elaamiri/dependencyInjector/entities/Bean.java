@@ -1,11 +1,13 @@
 package me.elaamiri.dependencyInjector.entities;
 
 import lombok.Data;
+import me.elaamiri.dependencyInjector.exceptions.BeanFieldExistsException;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 @XmlRootElement
@@ -19,8 +21,12 @@ public class Bean implements Serializable {
     @XmlElement(name="bean-field")
     private List<BeanField> beanFields = new ArrayList<>();
 
-    public BeanField addBeanField(BeanField beanField){
+    public BeanField addBeanField(BeanField beanField) throws BeanFieldExistsException {
+        if(this.beanFields.contains(beanField)) throw new BeanFieldExistsException();
         this.beanFields.add(beanField);
         return beanField;
     }
+
+
+
 }

@@ -15,4 +15,10 @@ public class BeanField implements Serializable {
     private String name;
     @XmlAttribute
     private String value;
+
+    public String getDefaultSetterName(){
+        String setterName = "set".concat(String.valueOf(name.charAt(0)).toUpperCase().concat(name.substring(1)));
+        System.out.println(setterName);
+        return setterName;
+    }
 }

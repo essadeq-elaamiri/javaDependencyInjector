@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <beans>
-    <Bean name="employeeDaoImpl1" className="me.elaamiri.testSample.dao.EmployeeDaoImpl1">
+    <Bean name="employeeDaoImpl1" className="me.elaamiri.testSample.dao.EmployeeDaoImpl2">
     </Bean>
     <Bean name="employeeServiceImpl" className="me.elaamiri.testSample.service.EmployeeServiceImpl">
         <bean-field name="employeeDao" value="employeeDaoImpl1" injectInto="FIELD"/>

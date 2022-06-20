@@ -192,6 +192,7 @@ public class DependencyInjector {
         if (scopePackage == null) scopePackage =  DependencyInjector.class.getPackageName().substring(0, DependencyInjector.class.getPackageName().indexOf('.'));
 
         // Search all the annotated classes
+
         System.out.println(scopePackage);
         return null;
     }

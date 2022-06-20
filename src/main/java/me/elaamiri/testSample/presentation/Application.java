@@ -60,11 +60,16 @@ public class Application {
         //DependencyInjector.fun();
 
         // test
-        Context context = DependencyInjector.runInjector(null);
+        /*
+        Context context = DependencyInjector.runXMLInjector(null);
         EmployeeServiceImpl service = (EmployeeServiceImpl) context.getBeanByName("employeeServiceImpl");
         System.out.println(service.getServiceMessage());
         //service.setEmployeeDao(new EmployeeDaoImpl1());
         System.out.println(service.getEmployeeDao());
+
+         */
+
+        DependencyInjector.runAnnotationsInjector(null);
 
     }
 

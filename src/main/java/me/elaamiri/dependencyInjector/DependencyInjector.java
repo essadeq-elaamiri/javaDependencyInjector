@@ -9,7 +9,6 @@ import me.elaamiri.dependencyInjector.enums.FieldInjectionType;
 import me.elaamiri.dependencyInjector.exceptions.BeanExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeanFieldExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeansCouldNotBeLoadedException;
-import me.elaamiri.testSample.dao.EmployeeDao;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -29,7 +28,7 @@ public class DependencyInjector {
      * @return
      * @throws BeansCouldNotBeLoadedException
      */
-    public static Context runInjector(String configFilePath) throws BeansCouldNotBeLoadedException {
+    public static Context runXMLInjector(String configFilePath) throws BeansCouldNotBeLoadedException {
 
         /**
          * TODO:
@@ -185,6 +184,16 @@ public class DependencyInjector {
 
             System.out.println("Hello World!");
         }
+    }
+
+
+    public static Context runAnnotationsInjector(String scopePackage){
+        // default scope is the root package
+        if (scopePackage == null) scopePackage =  DependencyInjector.class.getPackageName().substring(0, DependencyInjector.class.getPackageName().indexOf('.'));
+
+        // Search all the annotated classes
+        System.out.println(scopePackage);
+        return null;
     }
 
 }

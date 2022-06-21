@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
-@Slf4j
 public class DependencyInjector {
 
     /***
@@ -211,9 +210,29 @@ public class DependencyInjector {
         beansToBeInjected.forEach(aClass -> System.out.println(aClass.getName()));
 
         beansInstances = instantiateAllBeans(beansToBeInjected);
+        //**** logging
+        System.out.println("(3) Created instances : ["+beansInstances.size()+"]");
+        beansInstances.forEach((name, object) -> System.out.println(name));
+
+        // adding them to context
+        beansInstances.forEach((s, o) -> {
+            try {
+                context.addToInstancesMap(s, o);
+            } catch (BeanExistsException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
         for (Class bean : beansToBeInjected){
+            //**** logging
+            System.out.println("(4) Processing class : ["+bean.getName()+"]");
+
             // finding annotated fields @DIInjected and do injection
             for (Field field : bean.getDeclaredFields()){
+                //**** logging
+                System.out.println("(5) Processing class field : ["+field.getName()+"]");
+
                 if(field.isAnnotationPresent(DIInjected.class)){
                     field.setAccessible(true);
                     // get annotation
@@ -231,6 +250,9 @@ public class DependencyInjector {
                             // check if the instance can be affected to the field
                             if(fieldType.isAssignableFrom(instance.getClass())){
                                 // affect it to it
+                                //**** logging
+                                System.out.println("(6) Do injection by type... : ["+field.getName()+"]");
+
                                 field.set(bean, instance);
                             }
                         }
@@ -249,6 +271,9 @@ public class DependencyInjector {
                             // check same names
                             if(beanInstanceName.equals(instanceName)){
                                 // affect it to it
+
+                                //**** logging
+                                System.out.println("(7) Do injection by name... : ["+field.getName()+"]");
                                 field.set(bean, beansInstances.get(instanceName));
                             }
                         }

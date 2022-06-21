@@ -38,7 +38,7 @@ public class Application {
             return employee;
         }).toList();
 
-        System.out.println(employees.toString());
+        //System.out.println(employees.toString());
         /*
         [Employee(name=Ahmed Zaytoun, email=Ahmed_Zaytoun@gmail.com, salary=20468.14008039223, department=null), Employee(name=Khalid Rachid, email=Khalid_Rachid@gmail.com, salary=15002.383245338471, department=null), Employee(name=Aziza lahrach, email=Aziza_lahrach@gmail.com, salary=22051.042755038638, department=null)]
          */
@@ -60,11 +60,16 @@ public class Application {
         //DependencyInjector.fun();
 
         // test
-        Context context = DependencyInjector.runInjector(null);
+        /*
+        Context context = DependencyInjector.runXMLInjector(null);
         EmployeeServiceImpl service = (EmployeeServiceImpl) context.getBeanByName("employeeServiceImpl");
         System.out.println(service.getServiceMessage());
         //service.setEmployeeDao(new EmployeeDaoImpl1());
         System.out.println(service.getEmployeeDao());
+
+         */
+
+        DependencyInjector.runAnnotationsInjector(null);
 
     }
 

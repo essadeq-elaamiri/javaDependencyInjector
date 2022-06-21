@@ -1,5 +1,7 @@
 package me.elaamiri.dependencyInjector;
 
+import me.elaamiri.dependencyInjector.annotations.DIBean;
+import me.elaamiri.dependencyInjector.annotations.DIInjected;
 import me.elaamiri.dependencyInjector.constantes.Constants;
 import me.elaamiri.dependencyInjector.entities.Bean;
 import me.elaamiri.dependencyInjector.entities.BeanField;
@@ -9,17 +11,20 @@ import me.elaamiri.dependencyInjector.enums.FieldInjectionType;
 import me.elaamiri.dependencyInjector.exceptions.BeanExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeanFieldExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeansCouldNotBeLoadedException;
-import me.elaamiri.testSample.dao.EmployeeDao;
+import org.reflections.Reflections;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class DependencyInjector {
 
@@ -29,7 +34,7 @@ public class DependencyInjector {
      * @return
      * @throws BeansCouldNotBeLoadedException
      */
-    public static Context runInjector(String configFilePath) throws BeansCouldNotBeLoadedException {
+    public static Context runXMLInjector(String configFilePath) throws BeansCouldNotBeLoadedException {
 
         /**
          * TODO:
@@ -185,6 +190,81 @@ public class DependencyInjector {
 
             System.out.println("Hello World!");
         }
+    }
+
+
+    public static Context runAnnotationsInjector(String scopePackage) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, BeanExistsException {
+        Context context = new Context();
+        HashMap<String, Object> beansInstances = new HashMap<>();
+        // default scope is the root package
+        if (scopePackage == null) scopePackage =  DependencyInjector.class.getPackageName().substring(0, DependencyInjector.class.getPackageName().indexOf('.'));
+
+        // Search all the annotated @DIBean classes and instantiate them
+        Set<Class<?>> beansToBeInjected =  getAllBeans(scopePackage);
+        beansInstances = instantiateAllBeans(beansToBeInjected);
+        for (Class bean : beansToBeInjected){
+            // finding annotated fields @DIInjected and do injection
+            for (Field field : bean.getDeclaredFields()){
+                if(field.isAnnotationPresent(DIInjected.class)){
+                    // get annotation
+                    DIInjected fieldAnnotation = field.getAnnotation(DIInjected.class);
+                    // check the type
+                    Class fieldType = field.getType();
+                    // check name if exist find bean with the same name if exists
+                    // if not throw exception
+                    // if no name search all context beans of that type if one inject it (if the same name)
+                    String beanInstanceName = fieldAnnotation.value(); // bean to be injected in this field
+
+
+
+
+                    if(beanInstanceName.equals("n/a") || beanInstanceName.equals("")){ // default, so use the instance name
+                        // find a bean with the same type from the list
+                        for (Object instance: beansInstances.values()){
+                            if(instance instanceof  field.getType())
+                        }
+                        // find all if > 1 error
+
+
+                        // if 1 do injection
+                    }else{
+                        // find with name in context beans list
+                        // if < 1 error
+                        // if name ok but type not error
+
+                        // name ok and type ok do injection
+
+                    }
+                }
+            }
+
+
+        }
+        return context;
+    }
+
+    private static HashMap<String, Object> instantiateAllBeans(Set<Class<?>> beans) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        HashMap<String, Object> instances = new HashMap<>();
+
+        for (Class bean : beans) {
+            // if there is @DIBean anootation
+            if (bean.isAnnotationPresent(DIBean.class)) {
+                // get annotation
+                DIBean beanAnnotation = (DIBean) bean.getAnnotation(DIBean.class);
+                // Instanciation
+                Object beanInstance = bean.getDeclaredConstructor().newInstance();
+                String instanceName = beanAnnotation.name().equals("n/a") || beanAnnotation.name().equals("") ? bean.getName() : beanAnnotation.name();
+
+                instances.put(instanceName, beanInstance);
+            }
+        }
+    }
+
+    private static Set<Class<?>> getAllBeans(String scopePackage){
+        //Reflections reflections = new Reflections(".*");
+        Reflections reflections = new Reflections(scopePackage);
+        Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(DIBean.class);
+        return annotated;
     }
 
 }

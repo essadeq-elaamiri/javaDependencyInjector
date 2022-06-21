@@ -240,7 +240,7 @@ public class DependencyInjector {
                     DIInjected fieldAnnotation = field.getAnnotation(DIInjected.class);
                     // check the type
                     Class fieldType = field.getType();
-                    // check name if exist find bean with the same name if exists
+                    // TODO: check name if exist find bean with the same name if exists
                     // if not throw exception
                     // if no name search all context beans of that type if one inject it (if the same name)
                     String beanInstanceName = fieldAnnotation.value(); // bean to be injected in this field
@@ -258,16 +258,16 @@ public class DependencyInjector {
                                 field.set(instanceObj, instance);
                             }
                         }
-                        // find all if > 1 error
+                        // TODO: find all if > 1 error
 
 
                         // if 1 do injection
                     }else{ // there is a name
                         // find with name in context beans list
-                        // if < 1 error
-                        // if name ok but type not error
 
-                        // name ok and type ok do injection
+                        // TODO: if name ok but type not error
+
+                        // TODO: name ok and type ok do injection
 
                         for (String instanceName: beansInstances.keySet()){
                             // check same names

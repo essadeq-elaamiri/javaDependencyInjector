@@ -1,9 +1,11 @@
 package me.elaamiri.testSample.service;
 
+import me.elaamiri.dependencyInjector.annotations.DIBean;
 import me.elaamiri.dependencyInjector.annotations.DIInjected;
 import me.elaamiri.testSample.dao.EmployeeDao;
 
 
+@DIBean(name = "service")
 public class EmployeeServiceImpl implements EmployeeService{
 
     @DIInjected(value = "impl1")

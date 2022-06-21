@@ -12,6 +12,7 @@ import me.elaamiri.dependencyInjector.enums.FieldInjectionType;
 import me.elaamiri.dependencyInjector.exceptions.BeanExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeanFieldExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeansCouldNotBeLoadedException;
+import me.elaamiri.testSample.dao.EmployeeDao;
 import org.reflections.Reflections;
 
 import javax.xml.bind.JAXBContext;
@@ -252,8 +253,9 @@ public class DependencyInjector {
                                 // affect it to it
                                 //**** logging
                                 System.out.println("(6) Do injection by type... : ["+field.getName()+"]");
-
-                                field.set(bean, instance);
+                                // TODO: find the object to inject into
+                                Object instanceObj = beansInstances.values().stream().filter(o -> o.getClass().equals(bean)).toList().get(0);
+                                field.set(instanceObj, instance);
                             }
                         }
                         // find all if > 1 error
@@ -274,7 +276,8 @@ public class DependencyInjector {
 
                                 //**** logging
                                 System.out.println("(7) Do injection by name... : ["+field.getName()+"]");
-                                field.set(bean, beansInstances.get(instanceName));
+                                Object instanceObj = beansInstances.values().stream().filter(o -> o.getClass().equals(bean)).toList().get(0);
+                                field.set(instanceObj, beansInstances.get(instanceName));
                             }
                         }
 

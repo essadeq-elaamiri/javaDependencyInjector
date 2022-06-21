@@ -71,7 +71,10 @@ public class Application {
          */
 
         Context context = DependencyInjector.runAnnotationsInjector("me");
-        //System.out.println(context.getBeanByName());
+        System.out.println("Testing .....");
+        System.out.println(context.getBeanByName("service"));
+        EmployeeServiceImpl service = (EmployeeServiceImpl) context.getBeanByName("service");
+        System.out.println(service.getServiceMessage());
 
     }
 

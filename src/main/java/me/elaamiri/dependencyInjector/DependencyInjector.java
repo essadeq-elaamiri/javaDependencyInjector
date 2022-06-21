@@ -1,5 +1,6 @@
 package me.elaamiri.dependencyInjector;
 
+import lombok.extern.slf4j.Slf4j;
 import me.elaamiri.dependencyInjector.annotations.DIBean;
 import me.elaamiri.dependencyInjector.annotations.DIInjected;
 import me.elaamiri.dependencyInjector.constantes.Constants;
@@ -11,6 +12,7 @@ import me.elaamiri.dependencyInjector.enums.FieldInjectionType;
 import me.elaamiri.dependencyInjector.exceptions.BeanExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeanFieldExistsException;
 import me.elaamiri.dependencyInjector.exceptions.BeansCouldNotBeLoadedException;
+import me.elaamiri.testSample.dao.EmployeeDao;
 import org.reflections.Reflections;
 
 import javax.xml.bind.JAXBContext;
@@ -25,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class DependencyInjector {
 
@@ -198,41 +201,85 @@ public class DependencyInjector {
         HashMap<String, Object> beansInstances = new HashMap<>();
         // default scope is the root package
         if (scopePackage == null) scopePackage =  DependencyInjector.class.getPackageName().substring(0, DependencyInjector.class.getPackageName().indexOf('.'));
+        //**** logging
+        System.out.println("(1) Processing annotations in package: ["+scopePackage+"] ....");
 
         // Search all the annotated @DIBean classes and instantiate them
         Set<Class<?>> beansToBeInjected =  getAllBeans(scopePackage);
+        //**** logging
+        System.out.println("(2) Classes found : ["+beansToBeInjected.size()+"]");
+        beansToBeInjected.forEach(aClass -> System.out.println(aClass.getName()));
+
         beansInstances = instantiateAllBeans(beansToBeInjected);
+        //**** logging
+        System.out.println("(3) Created instances : ["+beansInstances.size()+"]");
+        beansInstances.forEach((name, object) -> System.out.println(name));
+
+        // adding them to context
+        beansInstances.forEach((s, o) -> {
+            try {
+                context.addToInstancesMap(s, o);
+            } catch (BeanExistsException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
         for (Class bean : beansToBeInjected){
+            //**** logging
+            System.out.println("(4) Processing class : ["+bean.getName()+"]");
+
             // finding annotated fields @DIInjected and do injection
             for (Field field : bean.getDeclaredFields()){
+                //**** logging
+                System.out.println("(5) Processing class field : ["+field.getName()+"]");
+
                 if(field.isAnnotationPresent(DIInjected.class)){
+                    field.setAccessible(true);
                     // get annotation
                     DIInjected fieldAnnotation = field.getAnnotation(DIInjected.class);
                     // check the type
                     Class fieldType = field.getType();
-                    // check name if exist find bean with the same name if exists
+                    // TODO: check name if exist find bean with the same name if exists
                     // if not throw exception
                     // if no name search all context beans of that type if one inject it (if the same name)
                     String beanInstanceName = fieldAnnotation.value(); // bean to be injected in this field
 
-
-
-
                     if(beanInstanceName.equals("n/a") || beanInstanceName.equals("")){ // default, so use the instance name
                         // find a bean with the same type from the list
                         for (Object instance: beansInstances.values()){
-                            if(instance instanceof  field.getType())
+                            // check if the instance can be affected to the field
+                            if(fieldType.isAssignableFrom(instance.getClass())){
+                                // affect it to it
+                                //**** logging
+                                System.out.println("(6) Do injection by type... : ["+field.getName()+"]");
+                                // TODO: find the object to inject into
+                                Object instanceObj = beansInstances.values().stream().filter(o -> o.getClass().equals(bean)).toList().get(0);
+                                field.set(instanceObj, instance);
+                            }
                         }
-                        // find all if > 1 error
+                        // TODO: find all if > 1 error
 
 
                         // if 1 do injection
-                    }else{
+                    }else{ // there is a name
                         // find with name in context beans list
-                        // if < 1 error
-                        // if name ok but type not error
 
-                        // name ok and type ok do injection
+                        // TODO: if name ok but type not error
+
+                        // TODO: name ok and type ok do injection
+
+                        for (String instanceName: beansInstances.keySet()){
+                            // check same names
+                            if(beanInstanceName.equals(instanceName)){
+                                // affect it to it
+
+                                //**** logging
+                                System.out.println("(7) Do injection by name... : ["+field.getName()+"]");
+                                Object instanceObj = beansInstances.values().stream().filter(o -> o.getClass().equals(bean)).toList().get(0);
+                                field.set(instanceObj, beansInstances.get(instanceName));
+                            }
+                        }
 
                     }
                 }
@@ -258,6 +305,7 @@ public class DependencyInjector {
                 instances.put(instanceName, beanInstance);
             }
         }
+        return instances;
     }
 
     private static Set<Class<?>> getAllBeans(String scopePackage){

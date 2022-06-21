@@ -13,6 +13,7 @@ import me.elaamiri.testSample.entities.Employee;
 import me.elaamiri.testSample.service.EmployeeService;
 import me.elaamiri.testSample.service.EmployeeServiceImpl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -21,7 +22,7 @@ import java.util.stream.Stream;
 
 
 public class Application {
-    public static void main(String[] args) throws BeanNotFoundException, BeansCouldNotBeLoadedException, BeanExistsException, BeanFieldExistsException {
+    public static void main(String[] args) throws BeanNotFoundException, BeansCouldNotBeLoadedException, BeanExistsException, BeanFieldExistsException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         /**
          * TODO: show the  first Employee from the list, get his salary value in $, after that find the employee with name contains 'z' in the list
          * To that, This application needs an instance of EmployeeServiceImp, which present these functionalities
@@ -69,7 +70,11 @@ public class Application {
 
          */
 
-        DependencyInjector.runAnnotationsInjector(null);
+        Context context = DependencyInjector.runAnnotationsInjector("me");
+        System.out.println("Testing .....");
+        System.out.println(context.getBeanByName("service"));
+        EmployeeServiceImpl service = (EmployeeServiceImpl) context.getBeanByName("service");
+        System.out.println(service.getServiceMessage());
 
     }
 
